@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<th:block th:fragment="header">
+    <div class="header">
+        <div class="logo">
+            <a th:href="@{/}">
+                <img th:src="@{/img/test.png}" alt="로고">
+            </a>
+        </div>
+        <div class="menu-icon">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="menu">
+            <ul>
+                <li>
+                    <a th:href="@{/about}">About</a>
+                </li>
+                <li>
+                    <a th:href="@{/projects}">Projects</a>
+                </li>
+                <li>
+                    <a th:href="@{/articles}">Articles</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</th:block>
+</html>
