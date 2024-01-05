@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-public class Project {
+public class Projects {
     @Id
     @GeneratedValue
     private Long id;
@@ -124,7 +124,7 @@ public class Project {
 
     @Override
     public String toString() {
-        return "Project{" +
+        return "Projects{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", name='" + name + '\'' +
@@ -138,7 +138,7 @@ public class Project {
                 '}';
     }
 
-    public void update(Project project) {
+    public void update(Projects project) {
         this.title = project.getTitle();
         this.name = project.getName();
         this.coverImage = project.getCoverImage();
