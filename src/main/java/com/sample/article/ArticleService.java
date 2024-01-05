@@ -19,7 +19,7 @@ public class ArticleService {
 
     public List<Article> getArticles(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return articleRepository.findByIdGreatingThanOrderByIdDesc(0l, pageable);
+        return articleRepository.findByIdGreaterThanOrderByIdDesc(0l, pageable);
     }
 
     public Article insertArticle(Article article) {
