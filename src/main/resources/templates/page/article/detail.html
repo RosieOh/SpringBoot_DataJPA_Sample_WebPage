@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rosie's Blog</title>
+    <th:block th:replace="~{layout/head :: head}"></th:block>
+</head>
+<body>
+
+<th:block th:replace="~{layout/header :: header}"></th:block>
+<div class="container">
+    <div class="cover center-image">
+        <div class="cover-mask"></div>
+        <div class="cover-inner">
+            <div class="cover-cell content-meta">
+                <h3 class="title">{{article.title}}</h3>
+                <p class="name">{{article.subTitle}}</p>
+                <p class="datetime">{{article.createdTimeAt}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="content-item">
+            <div class="top-menu">
+                <ul>
+                    <li>
+                        <button type="button">
+                            <a th:href="@{/article/edit/{id}(id=${article.id})}">
+                                <i class="fas fa-edit"></i> 수정
+                            </a>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button">
+                            <a class="btn-delete"><i class="fas fa-trash"></i> 삭제</a>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="content-item">
+            <div class="content-description">
+                <div id="viewerSection"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    const viewer = new tui.Editor.factory({
+        el: document.querySelector('#viewerSection'),
+        viewer: true,
+        height: 'fit-content'
+    })
+    viewer.setValue(`{{{article.content}}}`);
+
+    // YYYY-mm-dd 부분만 자름.
+    $(".datetime").text($(".datetime").text().slice(0, 10))
+
+    // cover image 삽입
+    {{#article.coverImage}}
+    $('.cover').css("background-image", "url('{{{article.coverImage}}}')");
+    {{/article.coverImage}}
+
+            $(document).ready(() => {
+
+                // 삭제 버튼 눌렀을 시.
+                $(".btn-delete").click(() => {
+                    $.ajax({
+                        method: 'DELETE',
+                        url: '/article/detail/{{article.id}}',
+                    })
+                    // TODO : 예외처리 코드
+                    window.location = "/article/list"
+                })
+            })
+        }
+    }
+</script>
+
+<th:block th:replace="~{layout/footer :: footer}"></th:block>
+</body>
+</html>

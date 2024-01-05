@@ -1,0 +1,76 @@
+<!-- 서버에서 렌더링할 HTML 코드 (Thymeleaf 템플릿) -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rosie's Blog</title>
+    <th:block th:replace="~{layout/head :: head}"></th:block>
+</head>
+<body>
+
+<th:block th:replace="~{layout/header :: header}"></th:block>
+<div class="container">
+    <div class="content">
+        <div class="content-item">
+            <div id="editorSection" th:utext="${content}"></div>
+            <div class="editor-menu">
+                <ul>
+                    <li>
+                        <button type="button" id="submit">
+                            <a href="#"><i class="fas fa-success"></i>완료</a>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    $(document).ready(() => {
+
+        // tui editor 초기화
+        const editor = new tui.Editor({
+            el: document.querySelector('#editorSection'),
+            initialEditType: 'wysiwyg',
+            previewStyle: 'vertical',
+            height: '800px',
+            usageStatistics: false,
+            exts: ['colorSyntax'],
+            language: 'ko_KR',
+            placeholder: '여기에 내용을 입력해주세요.'
+        });
+
+        /**** 이벤트 핸들러 등록 ****/
+        // * 제출 버튼 누를 시.
+        $('#submit').click(() => {
+            let content = editor.getHtml()
+
+            let data = {
+                'content': content
+            }
+
+            // server 로 data 를 POST 하는 작업
+            $.ajax({
+                method: 'POST',
+                url: '/about/edit',
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: "json"
+            }).done((data) => {
+                // 성공 시, about 페이지로 리다이렉트.
+                window.location = "/about/list"
+            }).fail((error)=> {
+                // 실패 시, 알림창 띄움.
+                alert("작업 중 에러가 발생했습니다.")
+            })
+        })
+    })
+</script>
+
+<th:block th:replace="~{layout/footer :: footer}"></th:block>
+</body>
+</html>
